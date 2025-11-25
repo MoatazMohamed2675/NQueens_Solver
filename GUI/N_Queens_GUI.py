@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import time
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from algorithms.Hill_Climbing.Hill_Climbing_Algorithm import solve
 
 # --- IMAGE HANDLING ---
