@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 import time
+from algorithms.Hill_Climbing.Hill_Climbing_Algorithm import solve
 
 # --- IMAGE HANDLING ---
 HAS_PIL = False
@@ -184,7 +185,7 @@ class NQueensApp:
         algo = self.algo_var.get()
         if algo == "Backtracking": self.generator = self.run_backtracking(n)
         elif algo == "Best-First Search": self.generator = self.run_placeholder(n, "Best-First")
-        elif algo == "Hill-Climbing": self.generator = self.run_placeholder(n, "Hill-Climbing")
+        elif algo == "Hill-Climbing": self.generator = solve(n)
         elif algo == "Cultural Algorithm": self.generator = self.run_placeholder(n, "Cultural Algo")
 
         self.start_time = time.time()
