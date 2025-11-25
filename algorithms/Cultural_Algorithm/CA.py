@@ -8,7 +8,7 @@ import numpy as np
 
 
 class CulturalAlgorithm:
-    def __init__(self, n, population_size=200, mutation_rate=0.01, max_generations=5000):
+    def __init__(self, n, population_size=300, mutation_rate=0.01, max_generations=5000):
         self.n = n
         self.pop_size = population_size
         self.mutation_rate = mutation_rate
