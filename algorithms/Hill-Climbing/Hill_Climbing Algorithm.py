@@ -6,9 +6,9 @@ class HillClimbing:
         self.max_restarts = max_restarts
 
     # -----------------------------
-    # Count Conflicts
+    # Heuristic Function
     # -----------------------------
-    def count_conflicts(self, board):
+    def heuristic_function(self, board):
         conflicts = 0
         for i in range(self.n):
             for j in range(i + 1, self.n):
@@ -30,7 +30,7 @@ class HillClimbing:
     def solve(self):
         for restart in range(self.max_restarts):
             board = self.generate_random_board()
-            current_conflicts = self.count_conflicts(board)
+            current_conflicts = self.heuristic_function(board)
 
             while True:
                 best_board = board.copy()
@@ -43,7 +43,7 @@ class HillClimbing:
                             continue
                         new_board = board.copy()
                         new_board[row] = col
-                        new_conflicts = self.count_conflicts(new_board)
+                        new_conflicts = self.heuristic_function(new_board)
 
                         if new_conflicts < best_conflicts:
                             best_board = new_board.copy()
@@ -62,3 +62,5 @@ class HillClimbing:
                 return board
 
         return None
+    
+
