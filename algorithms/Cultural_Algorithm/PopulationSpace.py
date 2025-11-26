@@ -5,12 +5,12 @@ class PopulationSpace:
     def __init__(self, n, population_size):
         self.n = n
         self.population_size = population_size
-        self.population = [self.create_chromosome() for _ in range(population_size)]
+        self.population = [self.create_chromosome() for _ in range(population_size)] # --> Create initial population
 
     def create_chromosome(self):
-        return [random.randint(0, self.n - 1) for _ in range(self.n)]
+        return [random.randint(0, self.n - 1) for _ in range(self.n)]  # --> Create randoms positons for queens
     
-    def fittness(self, population, chromosome=None):
+    def fittness(self, population, chromosome=None): # Calculate fitness values for  each chromsomes in the population
         fitness_values = []
         for chrom in population:
             penalty = 0
@@ -45,7 +45,7 @@ class PopulationSpace:
 
     
     def crossover(self, parent1, parent2):
-        cp = random.randint(1, self.n - 2)
+        cp = random.randint(1, self.n - 2) # random point for Crossover
 
         child1 = parent1[:cp] + parent2[cp:]
         child2 = parent2[:cp] + parent1[cp:]
@@ -62,7 +62,6 @@ class PopulationSpace:
             
             # Perform the swap (swap mutation)
             chromosome[idx1], chromosome[idx2] = chromosome[idx2], chromosome[idx1]
-            
             
         return chromosome
 
@@ -82,55 +81,53 @@ class PopulationSpace:
 
             parent2 = selected_pop[i + 1]
 
-            # Generate two children (pc is included in the signature but ignored as your crossover is unconditional)
+            # Generate two children
             children = self.crossover(parent1, parent2)
             
             new_pop_list.extend(children)
         
-        # 2. Mutation: Loop through all children
+        # 2. Mutation
         for i in range(len(new_pop_list)):
-            # pm (mutation rate) is passed here
-            # self.mutate modifies the chromosome list in place.
             self.mutate(new_pop_list[i], pm) 
             
-        # 3. Return the new population (NO self.population update here)
+        # 3. Return new population
         return new_pop_list
-    def n_queens(self, pop_size=100, max_generations=10000):
+    # def n_queens(self, pop_size=100, max_generations=10000):
 
-        population = self.population
-        best_fitness_overall = None
-        best_solution = None
+    #     population = self.population
+    #     best_fitness_overall = None
+    #     best_solution = None
 
-        for gen in range(max_generations):
+    #     for gen in range(max_generations):
 
-            # FITNESS
-            fitness_vals = self.fittness(population)
+    #         # FITNESS
+    #         fitness_vals = self.fittness(population)
 
-            best_idx = np.argmax(fitness_vals)
-            best_fitness = fitness_vals[best_idx]
+    #         best_idx = np.argmax(fitness_vals)
+    #         best_fitness = fitness_vals[best_idx]
 
-            if best_fitness_overall is None or best_fitness > best_fitness_overall:
-                best_fitness_overall = best_fitness
-                best_solution = population[best_idx]
+    #         if best_fitness_overall is None or best_fitness > best_fitness_overall:
+    #             best_fitness_overall = best_fitness
+    #             best_solution = population[best_idx]
 
-            print(f"\rGen={gen:06d} -f={int(-best_fitness_overall):03d}", end='')
+    #         print(f"\rGen={gen:06d} -f={int(-best_fitness_overall):03d}", end='')
 
-            if best_fitness == 0:
-                print("\nFound optimal solution")
-                break
+    #         if best_fitness == 0:
+    #             print("\nFound optimal solution")
+    #             break
 
-            # SELECTION
-            selected = []
-            for _ in range(pop_size // 2):
-                p1, p2 = self.selection(population, fitness_vals)
-                selected.append(p1)
-                selected.append(p2)
+    #         # SELECTION
+    #         selected = []
+    #         for _ in range(pop_size // 2):
+    #             p1, p2 = self.selection(population, fitness_vals)
+    #             selected.append(p1)
+    #             selected.append(p2)
 
-            # CROSSOVER + MUTATION
-            new_population = self.crossover_mutation(selected, pm=0.01)
+    #         # CROSSOVER + MUTATION
+    #         new_population = self.crossover_mutation(selected, pm=0.01)
 
-            population = new_population[:pop_size]
+    #         population = new_population[:pop_size]
 
-        print("\nBest solution:", best_solution)
-        return best_solution
+    #     print("\nBest solution:", best_solution)
+    #     return best_solution
 
