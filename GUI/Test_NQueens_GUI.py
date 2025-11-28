@@ -8,6 +8,7 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from algorithms.Hill_Climbing.Hill_Climbing_Algorithm import HillClimbing
 from algorithms.Cultural_Algorithm.CA import CulturalAlgorithm
+from algorithms.BackTracking.BT import BackTracking
 
 
 class NQueensGUI:
@@ -30,7 +31,7 @@ class NQueensGUI:
 
         # Algorithm selection
         ttk.Label(control, text="Algorithm:").pack()
-        self.alg_choice = ttk.Combobox(control, values=["Hill Climbing", "Cultural Algorithm"], state="readonly")
+        self.alg_choice = ttk.Combobox(control, values=["Hill Climbing", "Cultural Algorithm", "Back Tracking", "Best First Search"], state="readonly")
         self.alg_choice.current(0)
         self.alg_choice.pack(pady=5)
         self.alg_choice.bind("<<ComboboxSelected>>", self.toggle_ca_fields)
@@ -124,7 +125,7 @@ class NQueensGUI:
             solution = solver.solve()
 
         # ---------- Cultural Algorithm ----------
-        else:
+        elif algo == "Cultural Algorithm":
             try:
                 pop = int(self.pop_entry.get())
                 mut = float(self.mut_entry.get())
@@ -140,6 +141,27 @@ class NQueensGUI:
                 max_generations=gen
             )
             solution = solver.run()
+        
+        # ---------- Backtracking ----------
+        elif algo == "Back Tracking":
+            solver = BackTracking()
+            solution = solver.solveNQueens(n)
+
+            if not solution:
+                self.log("No solution found.")
+                return
+
+            board = solution[0]
+
+            # Convert each string row to the column index of Q
+            solution = []
+            for row in board:
+                solution.append(row.index("Q"))
+
+        # ---------- Best First Search ----------
+        else:
+            messagebox.showerror("Invalid Selection", "Please select a valid algorithm")
+            return
 
         elapsed = time.time() - start
 
