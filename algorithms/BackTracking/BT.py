@@ -1,4 +1,4 @@
-class Solution:
+class BackTracking:
     def solveNQueens(self, n: int) -> list[list[str]]:
         col = set()
         pstDiag = set()
