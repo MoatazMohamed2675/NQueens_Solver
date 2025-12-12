@@ -9,7 +9,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from algorithms.Hill_Climbing.Hill_Climbing_Algorithm import HillClimbing
 from algorithms.Cultural_Algorithm.CA import CulturalAlgorithm
 from algorithms.BackTracking.BT import BackTracking
-
+from algorithms.Best_First_Search.BFS import SolutionBestFS
 
 class NQueensGUI:
     def __init__(self, root):
@@ -140,8 +140,10 @@ class NQueensGUI:
                 mutation_rate=mut,
                 max_generations=gen
             )
-            solution = solver.run()
-        
+
+            # Pass GUI log callback
+            solution = solver.run(log_callback=self.log)
+                
         # ---------- Backtracking ----------
         elif algo == "Back Tracking":
             solver = BackTracking()
@@ -160,8 +162,21 @@ class NQueensGUI:
 
         # ---------- Best First Search ----------
         else:
-            messagebox.showerror("Invalid Selection", "Please select a valid algorithm")
-            return
+            solver = SolutionBestFS()
+            solutions = solver.solveNQueens(n)
+
+            if not solutions:
+                self.log("No solution found.")
+                return
+
+            # Pick the first solution
+            board = solutions[0]
+
+            # Convert each string row to the column index of 'Q'
+            solution = []
+            for row in board:
+                solution.append(row.index("Q"))
+                
 
         elapsed = time.time() - start
 

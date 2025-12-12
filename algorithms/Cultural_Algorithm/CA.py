@@ -20,8 +20,52 @@ class CulturalAlgorithm:
     # ----------------------------------------------------------
     # RUN CULTURAL ALGORITHM
     # ----------------------------------------------------------
-    def run(self):
+    # def run(self):
+    #     population = self.PS.population  # initial GA population
+
+    #     for gen in range(self.max_generations):
+
+    #         # ---- FITNESS ----
+    #         fitness = self.PS.fittness(population)
+
+    #         # ---- UPDATE BELIEF SPACE ----
+    #         self.BS.update(population, fitness)
+
+    #         # ---- TRACK BEST ----
+    #         best_idx = np.argmax(fitness)
+    #         best_fit = fitness[best_idx]
+
+    #         print(f"\rGen={gen:05d} | conflicts={-best_fit:03d}", end="")
+
+    #         if best_fit == 0:
+    #             print("\nSolution found!")
+    #             return population[best_idx]
+
+    #         # ---- SELECTION ----
+    #         selected = []
+    #         for _ in range(self.pop_size // 2):
+    #             p1, p2 = self.PS.selection(population, fitness)
+    #             selected.append(p1)
+    #             selected.append(p2)
+
+    #         # ---- CROSSOVER + MUTATION ----
+    #         new_population = self.PS.crossover_mutation(
+    #             selected_pop=selected,
+    #             pm=self.mutation_rate
+    #         )
+
+    #         # ---- CULTURAL INFLUENCE ----
+    #         population = self.BS.influence(new_population)
+
+    #     print("\nNo perfect solution found.")
+    #     return None
+   
+
+    def run(self, log_callback=None):
         population = self.PS.population  # initial GA population
+        final_gen = 0
+        final_conflicts = None
+        best_solution = None
 
         for gen in range(self.max_generations):
 
@@ -36,10 +80,14 @@ class CulturalAlgorithm:
             best_fit = fitness[best_idx]
 
             print(f"\rGen={gen:05d} | conflicts={-best_fit:03d}", end="")
+            
+            # Keep track of final generation and conflicts
+            final_gen = gen
+            final_conflicts = -best_fit
+            best_solution = population[best_idx]
 
             if best_fit == 0:
-                print("\nSolution found!")
-                return population[best_idx]
+                break
 
             # ---- SELECTION ----
             selected = []
@@ -57,5 +105,15 @@ class CulturalAlgorithm:
             # ---- CULTURAL INFLUENCE ----
             population = self.BS.influence(new_population)
 
-        print("\nNo perfect solution found.")
-        return None
+        # Log final generation and conflicts
+        if log_callback:
+            log_callback(f"Final Gen={final_gen:05d} | Conflicts={final_conflicts:03d}")
+
+        if final_conflicts == 0:
+            if log_callback:
+                log_callback("Solution found!")
+            return best_solution
+        else:
+            if log_callback:
+                log_callback("No perfect solution found.")
+            return None
