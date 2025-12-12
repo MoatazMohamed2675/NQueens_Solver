@@ -10,8 +10,8 @@ class BeliefSpace:
         self.last_best = None
         self.no_improve = 0
 
-        self.tighten_ratio = 0.1
-        self.widen_threshold = 45
+        self.tighten_ratio = 0.15
+        self.widen_threshold = 50
         self.widen_step = 1
 
     def update(self, population, fitness):
