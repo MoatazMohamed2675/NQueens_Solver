@@ -41,12 +41,12 @@ class NQueensGUI:
         
         ttk.Label(self.ca_frame, text="Population Size:").pack(anchor="w")
         self.pop_entry = ttk.Entry(self.ca_frame, width=10)
-        self.pop_entry.insert(0, "300")
+        self.pop_entry.insert(0, "350")
         self.pop_entry.pack(pady=2)
 
         ttk.Label(self.ca_frame, text="Mutation Rate:").pack(anchor="w")
         self.mut_entry = ttk.Entry(self.ca_frame, width=10)
-        self.mut_entry.insert(0, "0.01")
+        self.mut_entry.insert(0, "0.2")
         self.mut_entry.pack(pady=2)
 
         ttk.Label(self.ca_frame, text="Max Generations:").pack(anchor="w")
