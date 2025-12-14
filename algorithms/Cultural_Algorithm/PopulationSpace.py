@@ -34,10 +34,18 @@ class PopulationSpace:
         return population[idx[0]], population[idx[1]]
 
     # --- UNIFORM CROSSOVER (FASTER & BETTER FOR N-QUEENS) ---
-    def crossover(self, p1, p2):
-        mask = np.random.randint(0, 2, size=self.n)
-        c1 = [p1[i] if mask[i] else p2[i] for i in range(self.n)]
-        c2 = [p2[i] if mask[i] else p1[i] for i in range(self.n)]
+    # def crossover(self, p1, p2):
+    #     mask = np.random.randint(0, 2, size=self.n)
+    #     c1 = [p1[i] if mask[i] else p2[i] for i in range(self.n)]
+    #     c2 = [p2[i] if mask[i] else p1[i] for i in range(self.n)]
+    #     return c1, c2
+     def crossover(self, p1, p2):
+
+        cp = np.random.randint(1, self.n - 1)
+
+        c1 = p1[:cp] + p2[cp:]
+        c2 = p2[:cp] + p1[cp:]
+
         return c1, c2
 
     # --- FAST MUTATION ---
