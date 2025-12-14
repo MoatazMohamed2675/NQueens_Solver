@@ -6,10 +6,12 @@ import sys, os
 
 # Adjust path for your modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from algorithms.Hill_Climbing.Hill_Climbing_Algorithm import HillClimbing
 from algorithms.Cultural_Algorithm.CA import CulturalAlgorithm
 from algorithms.BackTracking.BT import BackTracking
 from algorithms.Best_First_Search.BFS import SolutionBestFS
+
 
 class NQueensGUI:
     def __init__(self, root):
@@ -31,14 +33,23 @@ class NQueensGUI:
 
         # Algorithm selection
         ttk.Label(control, text="Algorithm:").pack()
-        self.alg_choice = ttk.Combobox(control, values=["Hill Climbing", "Cultural Algorithm", "Back Tracking", "Best First Search"], state="readonly")
+        self.alg_choice = ttk.Combobox(
+            control,
+            values=[
+                "Hill Climbing",
+                "Cultural Algorithm",
+                "Back Tracking",
+                "Best First Search"
+            ],
+            state="readonly"
+        )
         self.alg_choice.current(0)
         self.alg_choice.pack(pady=5)
         self.alg_choice.bind("<<ComboboxSelected>>", self.toggle_ca_fields)
 
         # -------- Cultural Algorithm Extra Inputs --------
         self.ca_frame = ttk.LabelFrame(control, text="CA Parameters")
-        
+
         ttk.Label(self.ca_frame, text="Population Size:").pack(anchor="w")
         self.pop_entry = ttk.Entry(self.ca_frame, width=10)
         self.pop_entry.insert(0, "350")
@@ -65,7 +76,12 @@ class NQueensGUI:
         right.pack(side="right", fill="both", expand=True)
 
         self.canvas_size = 400
-        self.canvas = tk.Canvas(right, width=self.canvas_size, height=self.canvas_size, bg="white")
+        self.canvas = tk.Canvas(
+            right,
+            width=self.canvas_size,
+            height=self.canvas_size,
+            bg="white"
+        )
         self.canvas.pack(pady=10)
 
         ttk.Label(right, text="Log:").pack(anchor="w")
@@ -82,7 +98,7 @@ class NQueensGUI:
 
     # --------------------------------------------------------
     def draw_board(self, solution, n):
-        """Draw chessboard + queens as Unicode icons."""
+        """Draw chessboard + queens."""
         self.canvas.delete("all")
         cell = self.canvas_size / n
 
@@ -91,13 +107,20 @@ class NQueensGUI:
                 x1, y1 = c * cell, r * cell
                 x2, y2 = x1 + cell, y1 + cell
                 color = "#F0D9B5" if (r + c) % 2 == 0 else "#B58863"
-                self.canvas.create_rectangle(x1, y1, x2, y2, fill=color, outline="")
+                self.canvas.create_rectangle(
+                    x1, y1, x2, y2,
+                    fill=color,
+                    outline=""
+                )
 
-        # Draw Unicode queen
         for r, c in enumerate(solution):
             cx = c * cell + cell / 2
             cy = r * cell + cell / 2
-            self.canvas.create_text(cx, cy, text="♛", font=("Arial", int(cell * 0.7)))
+            self.canvas.create_text(
+                cx, cy,
+                text="♛",
+                font=("Arial", int(cell * 0.7))
+            )
 
     # --------------------------------------------------------
     def log(self, text):
@@ -112,6 +135,14 @@ class NQueensGUI:
             n = int(self.n_entry.get())
         except ValueError:
             messagebox.showerror("Invalid Input", "N must be an integer")
+            return
+
+        
+        if n < 4:
+            messagebox.showerror(
+                "Invalid Board Size",
+                "N must be 4 or greater.\nNo solutions exist for N < 4."
+            )
             return
 
         algo = self.alg_choice.get()
@@ -131,7 +162,10 @@ class NQueensGUI:
                 mut = float(self.mut_entry.get())
                 gen = int(self.gen_entry.get())
             except ValueError:
-                messagebox.showerror("Invalid Input", "CA parameters must be numeric")
+                messagebox.showerror(
+                    "Invalid Input",
+                    "CA parameters must be numeric"
+                )
                 return
 
             solver = CulturalAlgorithm(
@@ -141,24 +175,19 @@ class NQueensGUI:
                 max_generations=gen
             )
 
-            # Pass GUI log callback
             solution = solver.run(log_callback=self.log)
-                
+
         # ---------- Backtracking ----------
         elif algo == "Back Tracking":
             solver = BackTracking()
-            solution = solver.solveNQueens(n)
+            solutions = solver.solveNQueens(n)
 
-            if not solution:
+            if not solutions:
                 self.log("No solution found.")
                 return
 
-            board = solution[0]
-
-            # Convert each string row to the column index of Q
-            solution = []
-            for row in board:
-                solution.append(row.index("Q"))
+            board = solutions[0]
+            solution = [row.index("Q") for row in board]
 
         # ---------- Best First Search ----------
         else:
@@ -169,14 +198,8 @@ class NQueensGUI:
                 self.log("No solution found.")
                 return
 
-            # Pick the first solution
             board = solutions[0]
-
-            # Convert each string row to the column index of 'Q'
-            solution = []
-            for row in board:
-                solution.append(row.index("Q"))
-                
+            solution = [row.index("Q") for row in board]
 
         elapsed = time.time() - start
 

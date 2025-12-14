@@ -5,9 +5,8 @@ class HillClimbing:
         self.n = n
         self.max_restarts = max_restarts
 
-    # -----------------------------
+
     # Heuristic Function
-    # -----------------------------
     def heuristic_function(self, board):
         conflicts = 0
         for i in range(self.n):
@@ -18,15 +17,11 @@ class HillClimbing:
                     conflicts += 1
         return conflicts
 
-    # -----------------------------
     # Generate Random Board
-    # -----------------------------
     def generate_random_board(self):
         return [random.randint(0, self.n - 1) for _ in range(self.n)]
 
-    # -----------------------------
     # Hill Climbing Algorithm
-    # -----------------------------
     def solve(self):
         for restart in range(self.max_restarts):
             board = self.generate_random_board()
