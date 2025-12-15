@@ -39,7 +39,7 @@ class PopulationSpace:
     #     c1 = [p1[i] if mask[i] else p2[i] for i in range(self.n)]
     #     c2 = [p2[i] if mask[i] else p1[i] for i in range(self.n)]
     #     return c1, c2
-     def crossover(self, p1, p2):
+    def crossover(self, p1, p2):
 
         cp = np.random.randint(1, self.n - 1)
 
